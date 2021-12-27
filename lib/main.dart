@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:pointing/login.dart';
 import 'maps.dart';
 import 'pointing.dart';
 import 'setting.dart';
@@ -67,6 +68,7 @@ class _homeState extends State<home> {
     }
     return;
   }
+
   int locationStatus = 0;
   int _selectedIndex = 0;
 

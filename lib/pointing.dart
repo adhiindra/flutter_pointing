@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -16,14 +14,15 @@ class pointing extends StatefulWidget {
 
 class _pointingState extends State<pointing> {
 
-  final ref = FirebaseDatabase.instance.ref();
+  String user = "Device 4";
+  final ref = FirebaseDatabase.instance.ref('Device/');
   late StreamSubscription streamRef;
 
   bool isSwitch = false;
-  var vBts = "0";
-  var hBts = "0";
-  var vClient = "0";
-  var hClient = "0";
+  int vBts = 0;
+  int hBts = 0;
+  int vClient = 0;
+  int hClient = 0;
 
   @override
     void initState() {
@@ -31,34 +30,50 @@ class _pointingState extends State<pointing> {
     super.initState();
 
   }
+
+  void updateDataBTS() async{
+    await ref.child('$user/Derajat/BTS/').update({
+      "Vertical":vBts,
+      "Horizontal":hBts,
+    });
+  }
+
+  void updateDataClient() async{
+    await ref.child('$user/Derajat/Client/').update({
+      "Vertical":vClient,
+      "Horizontal":hClient,
+    });
+  }
+
   readData() async{
-    streamRef = ref.child('Device/Device 4/Derajat/BTS/Vertical').onValue.listen((event) {
-      final String? svBts = event.snapshot.value.toString();
+    streamRef = ref.child('$user/Derajat/BTS/Vertical').onValue.listen((event) {
+      final int svBts = int.parse(event.snapshot.value.toString());
       setState(() {
-        vBts = '$svBts';
+        vBts = svBts;
       });
     });
 
-    streamRef = ref.child('Device/Device 4/Derajat/BTS/Horizontal').onValue.listen((event) {
-      final String? shBts = event.snapshot.value.toString();
+    streamRef = ref.child('$user/Derajat/BTS/Horizontal').onValue.listen((event) {
+      final int shBts = int.parse(event.snapshot.value.toString());
       setState(() {
-        hBts = '$shBts';
+        hBts = shBts;
+      });
+    });
+    //
+    streamRef = ref.child('$user/Derajat/Client/Vertical').onValue.listen((event) {
+      final int svClient = int.parse(event.snapshot.value.toString());
+      setState(() {
+        vClient = svClient;
       });
     });
 
-    streamRef = ref.child('Device/Device 4/Derajat/Client/Vertical').onValue.listen((event) {
-      final String? svClient = event.snapshot.value.toString();
+    streamRef = ref.child('$user/Derajat/Client/Horizontal').onValue.listen((event) {
+      final int shClient = int.parse(event.snapshot.value.toString());
       setState(() {
-        vClient = '$svClient';
+        hClient = shClient;
       });
     });
 
-    streamRef = ref.child('Device/Device 4/Derajat/Client/Horizontal').onValue.listen((event) {
-      final String? shClient = event.snapshot.value.toString();
-      setState(() {
-        hClient = '$shClient';
-      });
-    });
 
   }
 
@@ -176,6 +191,21 @@ class _pointingState extends State<pointing> {
                   child: IconButton(
                     iconSize: 70,
                     onPressed: (){
+                      if(isSwitch){
+                        if(vClient != 180){
+                          setState(() {
+                            vClient = vClient + 10;
+                          });
+                          updateDataClient();
+                        }
+                      }else{
+                        if(vBts != 180){
+                          setState(() {
+                            vBts = vBts + 10;
+                          });
+                          updateDataBTS();
+                        }
+                      }
                     },
                     icon: Icon(Icons.double_arrow,color: Colors.lightBlueAccent,),
                   ),
@@ -188,6 +218,21 @@ class _pointingState extends State<pointing> {
                       child: IconButton(
                         iconSize: 70,
                         onPressed: (){
+                          if(isSwitch){
+                            if(hClient != 180){
+                              setState(() {
+                                hClient = hClient + 10;
+                              });
+                              updateDataClient();
+                            }
+                          }else{
+                            if(hBts != 180){
+                              setState(() {
+                                hBts = hBts + 10;
+                              });
+                              updateDataBTS();
+                            }
+                          }
                         },
                         icon: Icon(Icons.double_arrow,color: Colors.lightBlueAccent,),
                       ),
@@ -199,7 +244,21 @@ class _pointingState extends State<pointing> {
                           color: Colors.lightBlueAccent, // button color
                           child: InkWell(
                             splashColor: Colors.white, // splash color
-                            onTap: () {}, // button pressed
+                            onTap: () {
+                              if(isSwitch){
+                                setState(() {
+                                  vClient = 90;
+                                  hClient = 90;
+                                });
+                                updateDataClient();
+                              }else{
+                                setState(() {
+                                  vBts = 90;
+                                  hBts = 90;
+                                });
+                                updateDataBTS();
+                              }
+                            }, // button pressed
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[ // icon
@@ -216,7 +275,23 @@ class _pointingState extends State<pointing> {
                     ),
                     IconButton(
                         iconSize: 70,
-                        onPressed: (){},
+                        onPressed: (){
+                          if(isSwitch){
+                            if(hClient != 0){
+                              setState(() {
+                                hClient = hClient - 10;
+                              });
+                              updateDataClient();
+                            }
+                          }else{
+                            if(hBts != 0){
+                              setState(() {
+                                hBts = hBts - 10;
+                              });
+                              updateDataBTS();
+                            }
+                          }
+                        },
                         icon: Icon(Icons.double_arrow, color: Colors.lightBlueAccent,)
                     ),
 
@@ -227,6 +302,21 @@ class _pointingState extends State<pointing> {
                   child: IconButton(
                     iconSize: 70,
                     onPressed: (){
+                      if(isSwitch){
+                        if(vClient != 0){
+                          setState(() {
+                            vClient = vClient - 10;
+                          });
+                          updateDataClient();
+                        }
+                      }else{
+                        if(vBts != 0){
+                          setState(() {
+                            vBts = vBts - 10;
+                          });
+                          updateDataBTS();
+                        }
+                      }
                     },
                     icon: Icon(Icons.double_arrow,color: Colors.lightBlueAccent,),
                   ),
