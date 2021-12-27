@@ -18,6 +18,11 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MaterialApp(
+    theme: ThemeData(
+      appBarTheme: AppBarTheme(
+        brightness: Brightness.dark,
+      ),
+    ),
     home: AnimatedSplashScreen(
       duration: 3000,
       splash: Container(

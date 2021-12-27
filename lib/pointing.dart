@@ -23,6 +23,8 @@ class _pointingState extends State<pointing> {
   int hBts = 0;
   int vClient = 0;
   int hClient = 0;
+  double altitudeBts = 0.0;
+  double altitudeClient = 0.0;
 
   @override
     void initState() {
@@ -46,6 +48,20 @@ class _pointingState extends State<pointing> {
   }
 
   readData() async{
+    streamRef = ref.child('$user/GPS/BTS/Altitude').onValue.listen((event) {
+      final double sAlt = double.parse(event.snapshot.value.toString());
+      setState(() {
+        altitudeBts = sAlt;
+      });
+    });
+
+    streamRef = ref.child('$user/GPS/Client/Altitude').onValue.listen((event) {
+      final double sAltClient = double.parse(event.snapshot.value.toString());
+      setState(() {
+        altitudeClient = sAltClient;
+      });
+    });
+
     streamRef = ref.child('$user/Derajat/BTS/Vertical').onValue.listen((event) {
       final int svBts = int.parse(event.snapshot.value.toString());
       setState(() {
@@ -87,7 +103,7 @@ class _pointingState extends State<pointing> {
             Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
               child: Container(
-                width: 130,
+                width: 150,
                 child: Card(
                   clipBehavior: Clip.antiAlias,
                   child: Padding(
@@ -118,6 +134,14 @@ class _pointingState extends State<pointing> {
                             Text("$hBts"),
                           ],
                         ),
+                        Row(
+                          children: <Widget>[
+                            Text('Altitude : '
+                            ),
+                            Text("$altitudeBts"),
+                            Text('m'),
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -142,7 +166,7 @@ class _pointingState extends State<pointing> {
             Padding(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
               child: Container(
-                width: 130,
+                width: 150,
                 child: Card(
                   clipBehavior: Clip.antiAlias,
                   child: Padding(
@@ -173,6 +197,14 @@ class _pointingState extends State<pointing> {
                             Text('$hClient'),
                           ],
                         ),
+                        Row(
+                          children: <Widget>[
+                            Text('Altitude : '
+                            ),
+                            Text("$altitudeClient"),
+                            Text('m'),
+                          ],
+                        )
                       ],
                     ),
                   ),
