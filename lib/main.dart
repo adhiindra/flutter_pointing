@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pointing/login.dart';
+import 'package:pointing/pref.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'maps.dart';
 import 'pointing.dart';
 import 'setting.dart';
@@ -19,6 +21,7 @@ void main() async{
   await Firebase.initializeApp();
   runApp(MaterialApp(
     theme: ThemeData(
+      fontFamily: 'Montserrat',
       appBarTheme: AppBarTheme(
         brightness: Brightness.dark,
       ),
@@ -32,9 +35,13 @@ void main() async{
           size: 100,
         ),
       ),
-      nextScreen: home(),
+      nextScreen: Homepref(),
       splashTransition: SplashTransition.fadeTransition,
       backgroundColor: Colors.lightBlue,),
+    routes: <String, WidgetBuilder> {
+      '/login': (BuildContext context) => new Login(),
+      '/home' : (BuildContext context) => new home(),
+    },
     debugShowCheckedModeBanner: false,
   ));
 }
@@ -48,10 +55,21 @@ class home extends StatefulWidget {
 
 class _homeState extends State<home> {
 
+  String username = "Perangkat";
+
   void initState() {
     super.initState();
     WidgetsBinding.instance
         ?.addPostFrameCallback((_) => _checkPermission());
+    getPrefData();
+  }
+
+  void getPrefData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString('username')!;
+      print(username);
+    });
   }
 
   Future<void> _checkPermission() async {
@@ -86,8 +104,14 @@ class _homeState extends State<home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:Padding(
-          padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+      appBar: AppBar(
+        toolbarHeight: 0,
+        elevation: 0.0,
+        backgroundColor: Colors.lightBlue,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+      ),
+      body: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -98,7 +122,7 @@ class _homeState extends State<home> {
                   children: <Widget>[
                     CircleAvatar(
                       radius: 32,
-                      backgroundColor: Colors.lightBlueAccent,
+                      backgroundColor: Colors.lightBlue,
                       child: CircleAvatar(
                         backgroundImage: AssetImage('assets/download.jpg'),
                         radius: 30,
@@ -111,10 +135,11 @@ class _homeState extends State<home> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            'Perangkat Penatih - Gianyar',
+                            '$username',
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
+                              fontFamily: 'Montserrat'
                             ),
                           ),
                           SizedBox(height: 3,),
@@ -125,6 +150,7 @@ class _homeState extends State<home> {
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.green,
+                                  fontFamily: 'Montserrat'
                                 ),
                               ),
                               SizedBox(width: 10,),
@@ -133,6 +159,7 @@ class _homeState extends State<home> {
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.green,
+                                  fontFamily: 'Montserrat'
                                 ),
                               ),
                             ],
@@ -154,20 +181,29 @@ class _homeState extends State<home> {
                     iconSize: 25,
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     duration: Duration(milliseconds: 400),
-                    tabBackgroundColor: Colors.lightBlueAccent,
-                    color: Colors.lightBlueAccent,
+                    tabBackgroundColor: Colors.lightBlue,
+                    color: Colors.lightBlue,
                     tabs: [
                       GButton(
                         icon: Icons.compare_arrows,
                         text: 'Pointing',
+                        textStyle: TextStyle(fontFamily: 'Montserrat',
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
                       ),
                       GButton(
                         icon: Icons.map,
                         text: 'Maps',
+                        textStyle: TextStyle(fontFamily: 'Montserrat',
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
                       ),
                       GButton(
                         icon: Icons.settings,
                         text: 'Setting',
+                        textStyle: TextStyle(fontFamily: 'Montserrat',
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
                       ),
                     ],
                   selectedIndex: _selectedIndex,

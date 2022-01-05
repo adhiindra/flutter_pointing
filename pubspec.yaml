@@ -36,7 +36,15 @@ dependencies:
   location: ^4.3.0
   permission_handler: ^8.3.0
   animated_splash_screen: ^1.1.0
-
+  geolocator: ^8.0.1
+  sliding_up_panel: ^2.0.0+1
+  cached_network_image: ^3.2.0
+  flutter_map: ^0.14.0
+  latlong: ^0.6.1
+  shared_preferences: ^2.0.11
+  app_settings: ^4.1.1
+  rounded_loading_button: ^2.0.9
+  flutter_placeholder_textlines: ^1.1.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -89,6 +97,18 @@ flutter:
    - family: Roboto
      fonts:
        - asset: fonts/Roboto-Bold.ttf
+       - asset: fonts/Roboto-Light.ttf
+       - asset: fonts/Roboto-Italic.ttf
+       - asset: fonts/Roboto-Medium.ttf
+       - asset: fonts/Roboto-Black.ttf
+       - asset: fonts/Roboto-Light.ttf
+       - asset: fonts/Roboto-Regular.ttf
+       - asset: fonts/Roboto-Thin.ttf
+   - family: Montserrat
+     fonts:
+       - asset: fonts/Montserrat-Bold.ttf
+       - asset: fonts/Montserrat-Italic.ttf
+       - asset: fonts/Montserrat-Regular.ttf
 
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
